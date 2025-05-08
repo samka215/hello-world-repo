@@ -15,6 +15,12 @@ jobs:
       # Runs a single command using the runners shell
       - name: Echo text
         run: echo "Hello, world!"
+      
+      - name: list repo
+        run: ls
+
+      - name: read file
+        run: cat README.md
 
 
   hello-job1:
