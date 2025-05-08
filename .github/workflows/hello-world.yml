@@ -31,8 +31,10 @@ jobs:
           ls -alrt
           echo "Hello, world!"
 
-      # - name: generate ASCII artwork
-      #   run: cowsay -f dragon "run for cover, I am a DRAGON....RAWR" >> dragon.txt
+      - name: executing shell script
+        run: |
+          chmod +x ascii-script.sh
+          ./ascii-sript.sh
 
       
 
