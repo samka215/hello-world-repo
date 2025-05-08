@@ -8,39 +8,57 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  ascii-job:
+  build:
     runs-on: ubuntu-latest
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      - name: checkout
-        uses: actions/checkout@v4
-
-      # Runs a single command using the runners shell
-      - name: install cowsay program
+      - name: install
         run: sudo apt-get install cowsay -y
-      
-      - name: execute cowsay CMD 
+
+      - name: execute cowsay cmd
         run: cowsay -f dragon "run for cover, I am a DRAGON....RAWR" >> dragon.txt
 
-      - name: test existing file
+      - name: upload dragon file
+        uses: actions/upload-artifact@v4
+        with:
+          name: dragon-artifact
+          path: dragon.txt
+
+
+  test:
+    needs: build
+    runs-on: ubuntu-latest
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      - name: download dragon file
+        uses: actions/download-artifact@v4
+        with:
+          name: dragon-artifact
+        
+
+      - name: test file exists
         run: grep -i "dragon" dragon.txt
+              
+
+
+  deploy:
+    needs: [test]
+    runs-on: ubuntu-latest
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      - name: download dragon file
+        uses: actions/download-artifact@v4
+        with:
+          name: dragon-artifact
 
       - name: read file
         run: cat dragon.txt
 
-      - name: List Repo File
-        run: ls -ltra
-
+      - name: deploy
+        run: echo "###########-depoying-##########-Dragon-###########"
+              
       
 
 
 
-#   hello-job1:
-#     needs: hello-job
-#     runs-on: ubuntu-latest
-#     # Steps represent a sequence of tasks that will be executed as part of the job
-#     steps:
-#       # Runs a single command using the runners shell
-#       - name: Echo text
-#         run: echo "Hello, samka!"
       
