@@ -44,7 +44,7 @@ jobs:
   deploy:
     needs: [test]
     runs-on: ubuntu-latest
-    # Steps represent a sequence of tasks that will be executed as part of the job
+    # Steps represent a sequence of tasks that will be executed as part of the jobs
     steps:
       - name: download dragon file
         uses: actions/download-artifact@v4
