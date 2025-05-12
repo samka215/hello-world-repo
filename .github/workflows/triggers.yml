@@ -1,0 +1,106 @@
+name: generate ASCII artwork
+
+# Controls when the workflow will run
+on:
+    workflow_dispatch:
+      inputs:
+        logLevel:
+          description: 'Log level'
+          required: true
+          default: 'warning'
+          type: choice
+          options:
+            - info
+            - warning
+            - debug
+# on:
+#   schedule:
+#     - cron: '*/10 * * * *'
+  # Triggers the workflow on push or pull request events but only for the "main" branch
+  # push:
+  #   branches: [ "main" ]
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      - name: install
+        run: sudo apt-get install cowsay -y
+
+      - name: execute cowsay cmd
+        run: cowsay -f dragon "run for cover, I am a DRAGON....RAWR" >> dragon.txt
+
+      - name: upload dragon file
+        uses: actions/upload-artifact@v4
+        with:
+          name: dragon-artifact
+          path: dragon.txt
+
+
+  test:
+    needs: build
+    runs-on: ubuntu-latest
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      - name: download dragon file
+        uses: actions/download-artifact@v4
+        with:
+          name: dragon-artifact
+        
+
+      - name: test file exists
+        run: grep -i "dragon" dragon.txt
+              
+
+
+  deploy:
+    needs: [test]
+    runs-on: ubuntu-latest
+    # Steps represent a sequence of tasks that will be executed as part of the jobs
+    steps:
+      - name: download dragon file
+        uses: actions/download-artifact@v4
+        with:
+          name: dragon-artifact
+
+      - name: read file
+        run: cat dragon.txt
+
+      - name: deploy
+        run: echo "###########-depoying-##########-Dragon-###########"
+
+      # - name: Install AWS CLI
+      #   run: |
+      #    sudo apt-get update -y
+      #    sudo apt-get install -y awscli
+      #    sleep 15
+          
+      # - name: Configure AWS Credentials
+      #   run: |
+      #     aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }}
+      #     aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      #     aws configure set default.region ${{ secrets.AWS_DEFAULT_REGION }}
+      #     aws configure set default.output json
+      - name: Install AWS SAM CLI
+        uses: aws-actions/setup-sam@v2
+    
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+         aws-region: ${{ secrets.AWS_DEFAULT_REGION }}
+      
+      - name: List AWS s3 Bucket
+        run: |
+              aws s3 ls
+              aws ec2 describe-instances
+              
+              
+      
+
+
+
+      
