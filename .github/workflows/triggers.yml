@@ -1,4 +1,4 @@
-name: generate ASCII artwork
+name: manual trigger
 
 # Controls when the workflow will run
 on:

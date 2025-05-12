@@ -1,4 +1,4 @@
-name: generate ASCII artwork
+name: cronjob every 10 minutes
 
 # Controls when the workflow will run
 on:
