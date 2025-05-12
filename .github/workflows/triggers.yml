@@ -3,17 +3,17 @@ name: generate ASCII artwork
 # Controls when the workflow will run
 on:
     workflow_dispatch:
-      inputs:
-        logLevel:
-          description: 'Log level'
-          required: true
-          default: 'warning'
-          type: choice
-          options:
-            - info
-            - warning
-            - debug
-# on:
+#       inputs:
+#         logLevel:
+#           description: 'Log level'
+#           required: true
+#           default: 'warning'
+#           type: choice
+#           options:
+#             - info
+#             - warning
+#             - debug
+# # on:
 #   schedule:
 #     - cron: '*/10 * * * *'
   # Triggers the workflow on push or pull request events but only for the "main" branch
